@@ -1,11 +1,22 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <home-swiper :banners="banners" />
-    <home-recommds-view :recommends="recommends" />
-    <feature-view />
-    <tab-control :title="['流行', '新款', '精选']" @tabClick="tabClick" />
-    <goods-list :goodsList="showGoods" />
+
+    <scroll
+      class="content"
+      ref="scroll"
+      :probe-type="3"
+      @scroll="ContentScroll"
+      :pull-up-load="true"
+      @pullingUp="pullingUp"
+    >
+      <home-swiper :banners="banners" />
+      <home-recommds-view :recommends="recommends" />
+      <feature-view />
+      <tab-control :title="['流行', '新款', '精选']" @tabClick="tabClick" />
+      <goods-list :goodsList="showGoods" />
+    </scroll>
+    <back-top class="back-top" @click.native="BackTop" v-show="isShowBackTop" />
   </div>
 </template>
 
@@ -17,6 +28,8 @@ import FeatureView from "./childComps/FeatureView.vue";
 import NavBar from "components/common/navbar/NavBar.vue";
 import TabControl from "components/content/tabControl/TabControl.vue";
 import GoodsList from "components/content/goods/GoodsList.vue";
+import Scroll from "components/common/scroll/Scroll.vue";
+import BackTop from "components/content/backTop/BackTop.vue";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 
@@ -29,6 +42,8 @@ export default {
     NavBar,
     TabControl,
     GoodsList,
+    Scroll,
+    BackTop,
   },
   data() {
     return {
@@ -41,6 +56,7 @@ export default {
       },
       // 保存当前选择浏览数据的类型
       currentType: "pop",
+      isShowBackTop: false,
     };
   },
   created() {
@@ -51,10 +67,32 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
+  mounted() {
+    // 监听item中图片加载完成
+    this.$bus.$on("itemImageLoad", () => {
+    // 检测this.$refs.scroll是否已经完成挂载，完成挂载在执行后面的代码
+    this.$refs.scroll && this.$refs.scroll.refresh();
+    });
+  },
   methods: {
     /**
      * 事件监听相关方法
      */
+    pullingUp() {
+      this.getHomeGoods(this.currentType);
+      this.$refs.scroll.finshPullUp();
+    },
+    ContentScroll(position) {
+      // console.log(position)
+      if (position.y < -1000) {
+        this.isShowBackTop = true;
+      } else {
+        this.isShowBackTop = false;
+      }
+    },
+    BackTop() {
+      this.$refs.scroll.scrollTo(0, 0, 500);
+    },
     tabClick(index) {
       switch (index) {
         case 0:
@@ -64,7 +102,7 @@ export default {
           this.currentType = "new";
           break;
         case 2:
-          this.currentType = 'sell';
+          this.currentType = "sell";
           break;
       }
     },
@@ -91,17 +129,19 @@ export default {
       });
     },
   },
-  computed:{
-    showGoods(){
-      return this.goods[this.currentType].list
-    }
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list;
+    },
   },
 };
 </script>
  
-<style>
+<style scoped>
 #home {
   padding-top: 44px;
+  /* vh代表视口，整个可见窗口大小 */
+  height: 100vh;
 }
 .home-nav {
   background-color: var(--color-tint);
@@ -118,5 +158,10 @@ export default {
   position: sticky;
   top: 44px;
   z-index: 9999;
+}
+
+.content {
+  height: calc(100vh - 44px - 49px);
+  overflow: hidden;
 }
 </style>

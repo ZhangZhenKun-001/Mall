@@ -1,7 +1,7 @@
 <template>
   <div class="goods-item">
     <a :href="goodsListItem.link">
-      <img :src="goodsListItem.show.img" alt="" />
+      <img :src="goodsListItem.show.img" alt="" @load="imageLoad"/>
       <div class="goods-info">
         <p>{{ goodsListItem.title }}</p>
         <span class="price">{{ goodsListItem.price }}</span>
@@ -20,6 +20,12 @@ export default {
         return {};
       },
     },
+  },
+  methods:{
+    imageLoad(){
+      // 重新加载完数据后刷新scroll内容的高度
+      this.$bus.$emit('itemImageLoad')
+    }
   },
 };
 </script>
