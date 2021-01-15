@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view />
+    <!-- 防止组件被销毁 -->
+    <keep-alive exclude="Detail"> 
+      <router-view />
+    </keep-alive>
     <main-tab-bar />
   </div>
 </template>
@@ -17,5 +20,5 @@ export default {
 
 
 <style>
-  @import "assets/css/base.css";
+@import "assets/css/base.css";
 </style>

@@ -1,13 +1,11 @@
 <template>
-  <div class="goods-item">
-    <a :href="goodsListItem.link">
-      <img :src="goodsListItem.show.img" alt="" @load="imageLoad"/>
-      <div class="goods-info">
-        <p>{{ goodsListItem.title }}</p>
-        <span class="price">{{ goodsListItem.price }}</span>
-        <span class="collect">{{ goodsListItem.cfav }}</span>
-      </div>
-    </a>
+  <div class="goods-item" @click="goodsItem">
+    <img :src="goodsListItem.show.img" alt="" @load="imageLoad" />
+    <div class="goods-info">
+      <p>{{ goodsListItem.title }}</p>
+      <span class="price">{{ goodsListItem.price }}</span>
+      <span class="collect">{{ goodsListItem.cfav }}</span>
+    </div>
   </div>
 </template>
 
@@ -21,11 +19,15 @@ export default {
       },
     },
   },
-  methods:{
-    imageLoad(){
+  methods: {
+    imageLoad() {
       // 重新加载完数据后刷新scroll内容的高度
-      this.$bus.$emit('itemImageLoad')
-    }
+      this.$bus.$emit("itemImageLoad");
+    },
+    // 跳转到详情页
+    goodsItem(){
+      this.$router.push('/detail/' + this.goodsListItem.iid)
+    },
   },
 };
 </script>
