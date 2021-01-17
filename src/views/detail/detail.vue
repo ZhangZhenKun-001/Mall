@@ -2,7 +2,7 @@
   <div id="detail">
     <detail-nav-bar class="detail-nav" />
     <scroll class="detail-content" ref="scroll">
-      <detail-swiper :top-images="topImages" />
+      <detail-swiper :top-images="topImages" /> 
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
       <detail-goods-info :detail-info="detailInfo" 
@@ -92,11 +92,7 @@ export default {
   background-color: #fff;
 }
 .detail-content {
-  /* position: absolute;
-  top: 44px;
-  left: 0;
-  right: 0;
-  bottom: 0; */
+
   height: calc(100% - 44px);
   /* overflow: hidden; */
 }
