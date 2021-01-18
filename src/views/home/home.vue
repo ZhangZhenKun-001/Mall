@@ -44,6 +44,7 @@ import BackTop from "components/content/backTop/BackTop.vue";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 import { debounce } from "common/utils";
+import {itemListenerMinIn} from "common/mixin"
 
 export default {
   name: "home",
@@ -57,6 +58,7 @@ export default {
     Scroll,
     BackTop,
   },
+  mixins:[itemListenerMinIn],
   data() {
     return {
       banners: [],
@@ -71,7 +73,7 @@ export default {
       isShowBackTop: false,
       tabOffsetTop: 0,
       isShowTabControl: false,
-      saveY:0
+      saveY:0,
     };
   },
   created() {
@@ -83,14 +85,6 @@ export default {
     this.getHomeGoods("sell");
   },
   mounted() {
-    const refresh = debounce(this.$refs.scroll.refresh, 50);
-    // 1. 监听item中图片加载完成
-    this.$bus.$on("itemImageLoad", () => {
-      // 检测this.$refs.scroll是否已经完成挂载，完成挂载再执行后面的代码
-      // this.$refs.scroll && this.$refs.scroll.refresh();
-      // 使用防抖函数来执行 refresh
-      refresh();
-    });
   },
   // 回到离开前页面的位置
   activated(){
@@ -99,7 +93,10 @@ export default {
   },
   // 记录离开页面时的位置信息
   deactivated(){
+    // 1.保存Y值
     this.saveY = this.$refs.scroll.getScrollY();
+    // 2.取消全局事件的监听
+    this.$bus.$off("itemImageLoad",this.itemImgListener);
   },
   methods: {
     /**
@@ -127,6 +124,7 @@ export default {
     },
     BackTop() {
       this.$refs.scroll.scrollTo(0, 0, 500);
+      this.$refs.scroll.refresh();
     },
     tabClick(index) {
       switch (index) {

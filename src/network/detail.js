@@ -9,6 +9,12 @@ export function getDetail(iid){
   })
 }
 
+export function getRecommend(){
+  return request({
+    url:'/recommend'
+  })
+}
+
 // 商品价格信息类
 export class Goods{
   constructor(itemInfo, columns, services){
@@ -35,7 +41,7 @@ export class Shop{
 
   }
 }
-
+// 商品的详细信息
 export class GoodsParam {
   constructor(info, rule) {
     // 注: images可能没有值(某些商品有值, 某些没有值)
