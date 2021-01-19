@@ -40,11 +40,10 @@ import NavBar from "components/common/navbar/NavBar.vue";
 import TabControl from "components/content/tabControl/TabControl.vue";
 import GoodsList from "components/content/goods/GoodsList.vue";
 import Scroll from "components/common/scroll/Scroll.vue";
-import BackTop from "components/content/backTop/BackTop.vue";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 import { debounce } from "common/utils";
-import {itemListenerMinIn} from "common/mixin"
+import {itemListenerMinIn,backTop} from "common/mixin"
 
 export default {
   name: "home",
@@ -56,9 +55,8 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop,
   },
-  mixins:[itemListenerMinIn],
+  mixins:[itemListenerMinIn,backTop],
   data() {
     return {
       banners: [],
@@ -70,7 +68,6 @@ export default {
       },
       // 保存当前选择浏览数据的类型
       currentType: "pop",
-      isShowBackTop: false,
       tabOffsetTop: 0,
       isShowTabControl: false,
       saveY:0,
@@ -102,7 +99,6 @@ export default {
     /**
      * 事件监听相关方法
      */
-
     // 监听轮播图图片是否加载完成
     swiperImageLoad() {
       this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
@@ -113,18 +109,11 @@ export default {
     },
     ContentScroll(position) {
       // console.log(position)
-      // 1. 返回顶部图标是否显示
-      if (position.y < -1000) {
-        this.isShowBackTop = true;
-      } else {
-        this.isShowBackTop = false;
-      }
+      // 返回顶部图标是否显示
+      this.showBackTop(position);
       // 2. 状态栏是否显示
       this.isShowTabControl = -position.y > this.tabOffsetTop;
-    },
-    BackTop() {
-      this.$refs.scroll.scrollTo(0, 0, 500);
-      this.$refs.scroll.refresh();
+      // this.$refs.scroll.refresh();
     },
     tabClick(index) {
       switch (index) {
@@ -140,6 +129,7 @@ export default {
       }
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
+      this.$refs.scroll.refresh();
     },
     /**
      * 网络请求相关方法
@@ -169,7 +159,7 @@ export default {
       return this.goods[this.currentType].list;
     },
   },
-};
+}
 </script>
  
 <style scoped>

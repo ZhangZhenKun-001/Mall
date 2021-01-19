@@ -1,8 +1,8 @@
 <template>
   <div>
     <nav-bar>
-      <div slot="left" @click="backClick"> 
-        <img src="~assets/img/common/back.svg" alt="">
+      <div slot="left" @click="backClick">
+        <img src="~assets/img/common/back.svg" alt="" />
       </div>
       <div slot="center" class="title">
         <div
@@ -28,17 +28,31 @@ export default {
       currentIndex: 0,
     };
   },
+  props: {
+    detailCurrentIndex: {
+      type: Number,
+      default: 0,
+    },
+  },
   components: {
     NavBar,
   },
+  // created() {
+  //   this.$bus.$on("contentScroll", () => {
+  //     this.currentIndex = this.detailCurrentIndex;
+  //     // console.log(this.detailCurrentIndex);
+  //   });
+  // },
   methods: {
+    titleClick(index) {
+      // this.$bus.$off("contentScroll");
+      this.currentIndex = index;
+      this.$emit("titleClick", this.currentIndex);
+    },
     isActive(index) {
       return index === this.currentIndex;
     },
-    titleClick(index) {
-      this.currentIndex = index;
-    },
-    backClick(){
+    backClick() {
       this.$router.back();
     },
   },
@@ -57,8 +71,7 @@ export default {
   color: var(--color-high-text);
 }
 
-.left img{
+.left img {
   margin-top: 11px;
 }
-
 </style>
