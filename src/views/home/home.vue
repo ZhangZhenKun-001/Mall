@@ -4,7 +4,7 @@
 
     <tab-control
       :title="['流行', '新款', '精选']"
-      @tabClick="tabClick" 
+      @tabClick="tabClick"
       ref="tabControl1"
       class="tab-control"
       v-show="isShowTabControl"
@@ -24,7 +24,7 @@
         :title="['流行', '新款', '精选']"
         @tabClick="tabClick"
         ref="tabControl2"
-      />
+      /> 
       <goods-list :goodsList="showGoods" />
     </scroll>
     <back-top class="back-top" @click.native="BackTop" v-show="isShowBackTop" />
@@ -161,7 +161,7 @@ export default {
   },
 }
 </script>
- 
+
 <style scoped>
 #home {
   /* vh代表视口，整个可见窗口大小 */

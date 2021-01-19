@@ -177,8 +177,9 @@ export default {
       product.iid = this.iid;
 
       // 将商品添加到购物车中
-      this.$store.commit('addCart',product)
-    }  
+      // this.$store.commit('addCart',product)
+      this.$store.dispatch('addCart',product)
+    }
   }
 }
 </script>
