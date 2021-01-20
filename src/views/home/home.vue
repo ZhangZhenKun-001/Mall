@@ -24,7 +24,7 @@
         :title="['流行', '新款', '精选']"
         @tabClick="tabClick"
         ref="tabControl2"
-      /> 
+      />
       <goods-list :goodsList="showGoods" />
     </scroll>
     <back-top class="back-top" @click.native="BackTop" v-show="isShowBackTop" />
@@ -106,6 +106,7 @@ export default {
     pullingUp() {
       this.getHomeGoods(this.currentType);
       this.$refs.scroll.finshPullUp();
+      this.$refs.scroll.refresh();
     },
     ContentScroll(position) {
       // console.log(position)
@@ -113,7 +114,6 @@ export default {
       this.showBackTop(position);
       // 2. 状态栏是否显示
       this.isShowTabControl = -position.y > this.tabOffsetTop;
-      // this.$refs.scroll.refresh();
     },
     tabClick(index) {
       switch (index) {

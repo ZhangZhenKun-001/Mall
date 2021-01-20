@@ -25,8 +25,8 @@ export class Goods{
     this.discount = itemInfo.discountDesc;
     this.columns = columns;
     this.services = services;
-    this.realPrice = itemInfo.lowNowPirce
-  } 
+    this.realPrice = itemInfo.lowNowPrice
+  }
 }
 
 // 商家店铺信息类
