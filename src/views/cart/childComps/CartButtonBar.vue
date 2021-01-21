@@ -12,7 +12,7 @@
       合计:{{ totalPrice }}
     </div>
 
-    <div class="calculate">
+    <div class="calculate" @click="calculate">
       去计算({{ totalNumber }})
     </div>
   </div>
@@ -36,6 +36,10 @@ export default {
         this.cartList.forEach(item => item.checked = false)
       else
         this.cartList.forEach(item => item.checked = true)
+    },
+    calculate() {
+      if (!this.$store.state.cartList.length)
+        this.$toast.show(' 请添加商品 ! ',1500)
     }
   },
   computed: {

@@ -168,7 +168,7 @@ export default {
     // 添加到购物车
     addToCart(){
       // console.log("+++++++++")
-      // 获取购物车需要展示的信息
+      // 1.获取购物车需要展示的信息
       const product = {}
       product.image = this.topImages[0];
       product.title = this.goods.title;
@@ -176,9 +176,15 @@ export default {
       product.price = this.goods.realPrice;
       product.iid = this.iid;
 
-      // 将商品添加到购物车中
+      // 2.将商品添加到购物车中
       // this.$store.commit('addCart',product)
-      this.$store.dispatch('addCart',product)
+      this.$store.dispatch('addCart',product).then( res => {
+        // console.log(res)
+        // console.log(this.$toast)
+        this.$toast.show(res,1500)
+        }
+      )
+
     }
   }
 }
